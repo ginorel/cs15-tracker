@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CS15 · Control de Vehículo</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f59e0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CS15">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
@@ -1269,6 +1274,44 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('fuel-cost').addEventListener('input', calcUnitPrice);
   renderDashboard();
 });
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/cs15-tracker/sw.js')
+        .then(() => console.log('SW registrado'))
+        .catch(e => console.log('SW error', e));
+    });
+  }
+
+  // Notificación diaria
+  async function scheduleNotification(hour, minute) {
+    if (!('Notification' in window)) return;
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') return;
+
+    const now = new Date();
+    const next = new Date();
+    next.setHours(hour, minute, 0, 0);
+    if (next <= now) next.setDate(next.getDate() + 1);
+    const delay = next - now;
+
+    setTimeout(() => {
+      new Notification('⛽ CS15 Tracker', {
+        body: '¿Registraste el odómetro hoy? Solo toma 30 segundos.',
+        icon: '/cs15-tracker/icon-192.png',
+      });
+      setInterval(() => {
+        new Notification('⛽ CS15 Tracker', {
+          body: '¿Registraste el odómetro hoy? Solo toma 30 segundos.',
+          icon: '/cs15-tracker/icon-192.png',
+        });
+      }, 24 * 60 * 60 * 1000);
+    }, delay);
+  }
+
+  // Activa notificación a las 9 PM por defecto
+  scheduleNotification(21, 0);
 </script>
 </body>
 </html>
