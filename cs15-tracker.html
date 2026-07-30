@@ -11,11 +11,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-  :root {
-    --bg:#0f1117;--surface:#181c27;--surface2:#1e2335;--border:#2a3050;
-    --fuel:#f59e0b;--maint:#3b82f6;--wash:#10b981;--glp:#a78bfa;--trip:#f472b6;
-    --text:#e8eaf0;--muted:#7c86a2;--danger:#ef4444;--good:#34d399;--r:12px;
-  }
+  :root{--bg:#0f1117;--surface:#181c27;--surface2:#1e2335;--border:#2a3050;--fuel:#f59e0b;--maint:#3b82f6;--wash:#10b981;--glp:#a78bfa;--trip:#f472b6;--text:#e8eaf0;--muted:#7c86a2;--danger:#ef4444;--good:#34d399;--r:12px;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;padding-bottom:70px;}
   header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
@@ -40,17 +36,13 @@
   .alert{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:11px 13px;margin-bottom:8px;font-size:12px;border-left:3px solid var(--fuel);}
   .form-group{margin-bottom:10px;}
   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .form-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
   label{display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px;}
   input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:9px 11px;font-family:inherit;font-size:13px;transition:border-color .15s;}
   input:focus,select:focus,textarea:focus{outline:none;border-color:var(--fuel);}
   select option{background:var(--surface);}
   textarea{resize:vertical;min-height:56px;}
-  .hint{font-size:11px;color:var(--muted);margin-top:4px;}
-  .hint.good{color:var(--good);}
   .btn{padding:10px 18px;border-radius:8px;border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
   .btn-primary{background:var(--fuel);color:#000;width:100%;justify-content:center;margin-top:6px;}
-  .btn-primary:hover{background:#fbbf24;}
   .btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);width:100%;justify-content:center;margin-top:6px;}
   .btn-success{background:var(--good);color:#000;width:100%;justify-content:center;margin-top:6px;}
   .btn-sm{padding:4px 10px;font-size:11px;border-radius:6px;}
@@ -70,12 +62,23 @@
   .rec-right{text-align:right;flex-shrink:0;}
   .rec-val{font-size:13px;font-weight:800;color:var(--text);}
   .rec-sub{font-size:10px;color:var(--muted);}
-  .rec-rend{font-size:12px;font-weight:700;margin-top:2px;}
   .rec-actions{display:flex;gap:4px;margin-top:6px;}
   .fuel-toggle{display:flex;gap:8px;margin-bottom:12px;}
   .fuel-btn{flex:1;padding:9px;border-radius:8px;border:2px solid var(--border);background:var(--bg);color:var(--muted);font-family:inherit;font-weight:700;cursor:pointer;font-size:12px;transition:all .15s;}
   .fuel-btn.ag{border-color:var(--fuel);color:var(--fuel);background:rgba(245,158,11,.08);}
   .fuel-btn.aglp{border-color:var(--glp);color:var(--glp);background:rgba(167,139,250,.08);}
+  /* Tanque lleno toggle */
+  .lleno-toggle{display:flex;gap:0;margin-bottom:12px;border-radius:8px;overflow:hidden;border:2px solid var(--border);}
+  .lleno-btn{flex:1;padding:10px;border:none;font-family:inherit;font-weight:700;font-size:12px;cursor:pointer;transition:all .15s;background:var(--bg);color:var(--muted);}
+  .lleno-btn.active-parcial{background:rgba(124,134,162,.15);color:var(--muted);}
+  .lleno-btn.active-lleno{background:rgba(52,211,153,.2);color:var(--good);}
+  /* Tanque progress bar */
+  .tank-bar-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:12px;}
+  .tank-bar-label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;display:flex;justify-content:space-between;}
+  .tank-bar-bg{height:12px;background:var(--bg);border-radius:6px;overflow:hidden;margin-bottom:6px;}
+  .tank-bar-fill{height:100%;border-radius:6px;transition:width .5s;}
+  .tank-bar-stats{display:flex;justify-content:space-between;font-size:11px;}
+  /* Progress steps */
   .progress{display:flex;align-items:center;margin-bottom:18px;}
   .pdot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:2px solid var(--border);background:var(--surface2);color:var(--muted);flex-shrink:0;}
   .pdot.done{background:var(--trip);border-color:var(--trip);color:#000;}
@@ -106,22 +109,27 @@
   .modal{background:var(--surface);border-radius:16px 16px 0 0;padding:20px 16px 32px;width:100%;max-height:90vh;overflow-y:auto;}
   .modal-title{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
   .modal-close{font-size:20px;cursor:pointer;color:var(--muted);}
-  /* Rendimiento pill */
   .rend-pill{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;}
   .rend-good{background:rgba(52,211,153,.15);color:var(--good);}
   .rend-ok{background:rgba(245,158,11,.15);color:var(--fuel);}
   .rend-bad{background:rgba(239,68,68,.15);color:var(--danger);}
   .rend-none{background:var(--surface2);color:var(--muted);}
-  /* Export section */
+  .lleno-badge{background:rgba(52,211,153,.15);color:var(--good);border:1px solid rgba(52,211,153,.3);padding:2px 7px;border-radius:20px;font-size:9px;font-weight:800;text-transform:uppercase;}
   .export-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
   .export-btn{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all .15s;}
   .export-btn:hover{border-color:var(--good);}
   .export-icon{font-size:24px;margin-bottom:4px;}
   .export-label{font-size:11px;font-weight:700;color:var(--text);}
   .export-sub{font-size:10px;color:var(--muted);}
+  /* Update banner */
+  .update-banner{display:none;position:fixed;top:60px;left:0;right:0;background:var(--maint);color:#fff;text-align:center;padding:10px;font-size:13px;font-weight:700;z-index:150;cursor:pointer;}
 </style>
 </head>
 <body>
+
+<div class="update-banner" id="update-banner" onclick="applyUpdate()">
+  🔄 Nueva versión disponible — toca para actualizar
+</div>
 
 <header>
   <div class="logo">⛽ <span id="hdr-name">Tracker</span></div>
@@ -134,13 +142,29 @@
   <div id="tab-dashboard" class="section active">
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-label">Odómetro</div><div class="stat-value" id="s-km" style="color:var(--trip)">— km</div><div class="stat-sub" id="s-km-sub">Sin datos</div></div>
-      <div class="stat-card"><div class="stat-label">Rendimiento</div><div class="stat-value" id="s-rend">— km/L</div><div class="stat-sub" id="s-rend-sub">Sin cargas suficientes</div></div>
+      <div class="stat-card"><div class="stat-label">Rendimiento</div><div class="stat-value" id="s-rend">— km/L</div><div class="stat-sub" id="s-rend-sub">Lleno a lleno</div></div>
       <div class="stat-card"><div class="stat-label">Combustible</div><div class="stat-value" id="s-fuel" style="color:var(--fuel)">S/ 0</div><div class="stat-sub" id="s-fuel-sub">0 cargas</div></div>
       <div class="stat-card"><div class="stat-label">Mantenimiento</div><div class="stat-value" id="s-maint" style="color:var(--maint)">S/ 0</div><div class="stat-sub" id="s-maint-sub">0 servicios</div></div>
     </div>
+
+    <!-- Barra de tanque acumulado -->
+    <div class="tank-bar-wrap" id="tank-bar-section" style="display:none;">
+      <div class="tank-bar-label">
+        <span>🔋 Combustible acumulado desde último lleno</span>
+        <span id="tank-pct-label">0%</span>
+      </div>
+      <div class="tank-bar-bg">
+        <div class="tank-bar-fill" id="tank-bar-fill" style="width:0%;background:var(--good);"></div>
+      </div>
+      <div class="tank-bar-stats">
+        <span id="tank-litros-label" style="color:var(--muted);font-size:11px;"></span>
+        <span id="tank-km-label" style="color:var(--muted);font-size:11px;"></span>
+      </div>
+    </div>
+
     <div id="dash-alerts"></div>
     <div class="card">
-      <div class="card-header">Rendimiento por carga <span style="font-size:10px;color:var(--muted);font-weight:400;">km/L entre cargas</span></div>
+      <div class="card-header">Rendimiento lleno a lleno <span style="font-size:10px;color:var(--muted);font-weight:400;">km/L</span></div>
       <div id="dash-chart" style="padding:12px;"></div>
     </div>
     <div class="card">
@@ -174,13 +198,12 @@
           <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Lee el odómetro al llegar.</p>
           <div class="form-group"><label>Km al LLEGAR</label><input type="number" id="t-km-end" class="km-big" placeholder="00000" min="0"></div>
           <div class="form-group"><label>Notas</label><input type="text" id="t-notes" placeholder="ej. Tráfico pesado, AC todo el viaje"></div>
-          <div class="form-group"><label>Medio de pago (si pagaste algo)</label><select id="t-pago"><option value="">— Ninguno —</option></select></div>
+          <div class="form-group"><label>Medio de pago</label><select id="t-pago"><option value="">— Ninguno —</option></select></div>
           <button class="btn btn-primary" onclick="tripNext2()">Ver resultado →</button>
           <button class="btn btn-secondary" onclick="tripGoTo(1)">← Atrás</button>
         </div>
         <div class="trip-step" id="ts3">
           <div class="result-grid" id="t-result"></div>
-          <p style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;">💡 El rendimiento se calcula automáticamente desde las cargas de combustible.</p>
           <button class="btn btn-primary" onclick="tripSave()">💾 Guardar viaje</button>
           <button class="btn btn-secondary" onclick="tripGoTo(2)">← Corregir</button>
         </div>
@@ -200,6 +223,12 @@
         <div class="fuel-toggle">
           <button class="fuel-btn ag" id="fbtn-gas" onclick="setFuelType('gasolina')">⛽ Gasolina</button>
           <button class="fuel-btn" id="fbtn-glp" onclick="setFuelType('glp')">🔵 GLP</button>
+        </div>
+        <!-- Tanque lleno toggle -->
+        <label>¿Cómo cargaste?</label>
+        <div class="lleno-toggle">
+          <button class="lleno-btn active-parcial" id="btn-parcial" onclick="setLleno(false)">⚡ Carga parcial</button>
+          <button class="lleno-btn" id="btn-lleno" onclick="setLleno(true)">🔋 Tanque lleno</button>
         </div>
         <div class="form-row">
           <div class="form-group"><label>Fecha</label><input type="date" id="f-date"></div>
@@ -256,10 +285,7 @@
         <button class="btn btn-primary" onclick="saveMaint()">Guardar mantenimiento</button>
       </div>
     </div>
-    <div class="card">
-      <div class="card-header">Historial</div>
-      <div id="maint-list"></div>
-    </div>
+    <div class="card"><div class="card-header">Historial</div><div id="maint-list"></div></div>
   </div>
 
   <!-- LAVADOS -->
@@ -270,10 +296,7 @@
         <div class="form-row">
           <div class="form-group"><label>Fecha</label><input type="date" id="w-date"></div>
           <div class="form-group"><label>Tipo</label>
-            <select id="w-type">
-              <option value="simple">Simple</option><option value="completo">Completo</option>
-              <option value="interior">Interior</option><option value="detailing">Detailing</option><option value="ceramica">Cerámico</option>
-            </select>
+            <select id="w-type"><option value="simple">Simple</option><option value="completo">Completo</option><option value="interior">Interior</option><option value="detailing">Detailing</option><option value="ceramica">Cerámico</option></select>
           </div>
         </div>
         <div class="form-row">
@@ -288,10 +311,7 @@
         <button class="btn btn-primary" onclick="saveWash()">Guardar lavado</button>
       </div>
     </div>
-    <div class="card">
-      <div class="card-header">Historial</div>
-      <div id="wash-list"></div>
-    </div>
+    <div class="card"><div class="card-header">Historial</div><div id="wash-list"></div></div>
   </div>
 
   <!-- CONFIGURACIÓN -->
@@ -305,19 +325,16 @@
         </div>
         <div class="form-row">
           <div class="form-group"><label>Año</label><input type="number" id="cfg-anio" placeholder="ej. 2023"></div>
-          <div class="form-group"><label>Placa</label><input type="text" id="cfg-placa" placeholder="ej. ABC-123"></div>
+          <div class="form-group"><label>Capacidad tanque (L)</label><input type="number" id="cfg-tanque" placeholder="ej. 42" step="0.1"></div>
         </div>
+        <div class="form-group"><label>Placa</label><input type="text" id="cfg-placa" placeholder="ej. ABC-123"></div>
         <button class="btn btn-primary" onclick="saveVehicle()">💾 Guardar vehículo</button>
       </div>
     </div>
     <div class="card">
       <div class="card-header">💳 Medios de pago</div>
       <div class="card-body">
-        <p class="hint" style="margin-bottom:8px;">Agrega tus métodos: Efectivo, Yape, Plin, Tarjeta, etc.</p>
-        <div class="add-tag-row">
-          <input type="text" id="new-pago" placeholder="ej. Yape">
-          <button onclick="addTag('pagos','new-pago')">+</button>
-        </div>
+        <div class="add-tag-row"><input type="text" id="new-pago" placeholder="ej. Yape"><button onclick="addTag('pagos','new-pago')">+</button></div>
         <div class="tag-list" id="tag-pagos"></div>
       </div>
     </div>
@@ -331,7 +348,7 @@
     <div class="card">
       <div class="card-header">⛽ Grifos frecuentes</div>
       <div class="card-body">
-        <div class="add-tag-row"><input type="text" id="new-grifo" placeholder="ej. Petroperu Javier Prado"><button onclick="addTag('grifos','new-grifo')">+</button></div>
+        <div class="add-tag-row"><input type="text" id="new-grifo" placeholder="ej. Lucyana"><button onclick="addTag('grifos','new-grifo')">+</button></div>
         <div class="tag-list" id="tag-grifos"></div>
       </div>
     </div>
@@ -352,18 +369,16 @@
         <button class="btn btn-primary" onclick="activateNotif()">🔔 Activar recordatorio</button>
       </div>
     </div>
-    <!-- EXPORTAR -->
     <div class="card">
       <div class="card-header">📥 Exportar datos (CSV)</div>
       <div class="card-body">
-        <p class="hint" style="margin-bottom:10px;">Descarga tus registros para abrirlos en Excel o Google Sheets.</p>
         <div class="export-grid">
           <div class="export-btn" onclick="exportCSV('fuel')"><div class="export-icon">⛽</div><div class="export-label">Combustible</div><div class="export-sub">Todas las cargas</div></div>
           <div class="export-btn" onclick="exportCSV('maintenance')"><div class="export-icon">🔧</div><div class="export-label">Mantenimiento</div><div class="export-sub">Todos los servicios</div></div>
           <div class="export-btn" onclick="exportCSV('wash')"><div class="export-icon">🚿</div><div class="export-label">Lavados</div><div class="export-sub">Todos los lavados</div></div>
           <div class="export-btn" onclick="exportCSV('trips')"><div class="export-icon">🗺️</div><div class="export-label">Viajes</div><div class="export-sub">Todos los viajes</div></div>
         </div>
-        <button class="btn btn-success" onclick="exportCSV('all')" style="margin-top:10px;">📥 Exportar TODO en un archivo</button>
+        <button class="btn btn-success" onclick="exportCSV('all')" style="margin-top:10px;">📥 Exportar TODO</button>
       </div>
     </div>
     <div class="card" style="border-color:rgba(239,68,68,.3);">
@@ -384,7 +399,6 @@
   <button class="btab" onclick="showTab('settings',this)"><span class="btab-icon">⚙️</span>Config.</button>
 </div>
 
-<!-- EDIT MODAL -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
     <div class="modal-title"><span id="edit-modal-title">Editar</span><span class="modal-close" onclick="closeModal()">✕</span></div>
@@ -396,28 +410,27 @@
 // ══════════════════════════════════════════════════════════════
 // DATA
 // ══════════════════════════════════════════════════════════════
-const KEY = 'cs15_v5';
+const KEY = 'cs15_v6';
 let D = { fuel:[], maintenance:[], wash:[], trips:[], cfg:{} };
 
 function loadData() {
   try {
     const s = localStorage.getItem(KEY);
-    if (s) { D = { ...D, ...JSON.parse(s) }; }
+    if (s) { D = {...D, ...JSON.parse(s)}; }
     else {
-      // migrate older versions
-      ['cs15_v4','cs15_tracker_v3','cs15_tracker_v2'].forEach(k => {
+      ['cs15_v5','cs15_v4','cs15_tracker_v3'].forEach(k => {
         const old = localStorage.getItem(k);
         if (old && !localStorage.getItem(KEY)) {
           const od = JSON.parse(old);
-          D.fuel = od.fuel||[]; D.maintenance = od.maintenance||[];
-          D.wash = od.wash||[]; D.trips = od.trips||[]; D.cfg = od.cfg||{};
+          D.fuel=od.fuel||[]; D.maintenance=od.maintenance||[];
+          D.wash=od.wash||[]; D.trips=od.trips||[]; D.cfg=od.cfg||{};
         }
       });
     }
-    if (!D.cfg) D.cfg = {};
-    ['destinos','grifos','lavaderos','pagos'].forEach(k => { if(!D.cfg[k]) D.cfg[k]=[]; });
-    // Default pagos
-    if (D.cfg.pagos.length === 0) D.cfg.pagos = ['Efectivo','Yape','Tarjeta'];
+    if (!D.cfg) D.cfg={};
+    ['destinos','grifos','lavaderos','pagos'].forEach(k=>{ if(!D.cfg[k]) D.cfg[k]=[]; });
+    if (D.cfg.pagos.length===0) D.cfg.pagos=['Efectivo','Yape','Tarjeta'];
+    if (!D.cfg.tanque) D.cfg.tanque = 42;
   } catch(e) { console.error(e); }
 }
 
@@ -428,97 +441,134 @@ function persist() { localStorage.setItem(KEY, JSON.stringify(D)); }
 // ══════════════════════════════════════════════════════════════
 function today() { return new Date().toISOString().split('T')[0]; }
 function fmtDate(d) { if(!d) return '—'; const [y,m,day]=d.split('-'); return `${day}/${m}/${y}`; }
-function genId() { return Date.now() + Math.floor(Math.random()*1000); }
+function genId() { return Date.now()+Math.floor(Math.random()*1000); }
 function maintLabel(t) { return {aceite:'Cambio aceite',filtros:'Filtros',llantas:'Llantas',frenos:'Frenos',bateria:'Batería',alineacion:'Alineación',revision:'Rev. técnica',soat:'SOAT',otro:'Otro'}[t]||t; }
 function washLabel(t) { return {simple:'Simple',completo:'Completo',interior:'Interior',detailing:'Detailing',ceramica:'Cerámico'}[t]||t; }
 function rendColor(r) { if(!r) return 'var(--muted)'; return r>=12?'var(--good)':r>=9?'var(--fuel)':'var(--danger)'; }
 function rendClass(r) { if(!r) return 'rend-none'; return r>=12?'rend-good':r>=9?'rend-ok':'rend-bad'; }
-
 function getMaxKm() {
-  const all = [...D.fuel.filter(r=>r.km).map(r=>r.km),...D.maintenance.filter(r=>r.km).map(r=>r.km),...D.trips.filter(r=>r.kmEnd).map(r=>r.kmEnd)];
-  return all.length ? Math.max(...all) : null;
+  const all=[...D.fuel.filter(r=>r.km).map(r=>r.km),...D.maintenance.filter(r=>r.km).map(r=>r.km),...D.trips.filter(r=>r.kmEnd).map(r=>r.kmEnd)];
+  return all.length?Math.max(...all):null;
 }
 
-// ── RENDIMIENTO entre cargas (Opción A) ──────────────────────
-// Para cada carga, calcula km recorridos desde la carga anterior ÷ litros de ESTA carga
+// ── RENDIMIENTO LLENO A LLENO ─────────────────────────────────
+// Acumula litros y km entre un lleno y el siguiente
 function calcRendimientos() {
-  // Ordenar cargas por km ascendente (solo las que tienen km y litros)
-  const cargas = D.fuel.filter(r => r.km && r.liters && r.liters > 0)
-    .slice().sort((a,b) => a.km - b.km);
+  // Ordenar por km ascendente
+  const cargas = D.fuel.filter(r=>r.km&&r.liters&&r.liters>0)
+    .slice().sort((a,b)=>a.km-b.km);
 
-  // Asignar rendimiento a cada carga
-  D.fuel.forEach(r => { r.rendimiento = null; });
+  // Reset
+  D.fuel.forEach(r=>{ r.rendimiento=null; r.rendKm=null; r.rendLitros=null; });
 
-  for (let i = 1; i < cargas.length; i++) {
-    const prev = cargas[i-1];
+  // Buscar pares de llenos
+  let lastLleno = null;
+  let litrosAcum = 0;
+
+  for (let i=0; i<cargas.length; i++) {
     const curr = cargas[i];
-    const kmRecorridos = curr.km - prev.km;
-    if (kmRecorridos > 0 && kmRecorridos < 2000) { // sanity check
-      const rend = kmRecorridos / curr.liters;
-      // Asignar al registro original
-      const orig = D.fuel.find(r => r.id === curr.id);
-      if (orig) orig.rendimiento = rend;
+    litrosAcum += curr.liters;
+
+    if (curr.lleno) {
+      if (lastLleno) {
+        const kmRecorridos = curr.km - lastLleno.km;
+        if (kmRecorridos>0 && kmRecorridos<5000) {
+          const rend = kmRecorridos / litrosAcum;
+          const orig = D.fuel.find(r=>r.id===curr.id);
+          if (orig) {
+            orig.rendimiento = rend;
+            orig.rendKm = kmRecorridos;
+            orig.rendLitros = litrosAcum;
+          }
+        }
+      }
+      lastLleno = curr;
+      litrosAcum = 0; // reset después del lleno
     }
   }
 }
 
-// ── Conversión combustible Perú ───────────────────────────────
-function calcLiters(soles, precio, tipo) {
-  if (!soles || !precio || soles<=0 || precio<=0) return null;
-  if (tipo === 'glp') return soles / precio;
-  return soles / (precio / 3.78541);
+// ── Acumulado desde último lleno (para barra de tanque) ───────
+function getTankStatus() {
+  const cargas = D.fuel.filter(r=>r.km&&r.liters&&r.liters>0)
+    .slice().sort((a,b)=>a.km-b.km);
+
+  let litrosAcum = 0;
+  let kmDesde = null;
+  let kmActual = getMaxKm();
+
+  // Encontrar último lleno
+  let lastLlenoIdx = -1;
+  for (let i=cargas.length-1; i>=0; i--) {
+    if (cargas[i].lleno) { lastLlenoIdx=i; break; }
+  }
+
+  if (lastLlenoIdx === -1) {
+    // No hay llenos, sumar todo
+    litrosAcum = cargas.reduce((s,r)=>s+r.liters,0);
+    kmDesde = cargas.length?cargas[0].km:null;
+  } else {
+    kmDesde = cargas[lastLlenoIdx].km;
+    for (let i=lastLlenoIdx+1; i<cargas.length; i++) {
+      litrosAcum += cargas[i].liters;
+    }
+  }
+
+  const tanque = D.cfg?.tanque||42;
+  const kmRecorridos = (kmDesde&&kmActual) ? kmActual-kmDesde : null;
+  const pct = Math.min(100, (litrosAcum/tanque)*100);
+  return { litrosAcum, kmRecorridos, pct, tanque };
 }
 
+// ── Conversión combustible Perú ───────────────────────────────
+function calcLiters(soles,precio,tipo) {
+  if(!soles||!precio||soles<=0||precio<=0) return null;
+  if(tipo==='glp') return soles/precio;
+  return soles/(precio/3.78541);
+}
 function fuelHints(tipo) {
-  if (tipo === 'glp') return ['Soles cargados de GLP','Precio x litro (S/)'];
+  if(tipo==='glp') return ['Soles cargados de GLP','Precio x litro (S/)'];
   return ['Soles cargados','Precio x galón (S/)'];
 }
-
-// ── Pagos select ──────────────────────────────────────────────
-function buildPagoOptions(selectedVal) {
-  const opts = ['<option value="">— Medio de pago —</option>'];
-  (D.cfg.pagos||[]).forEach(p => opts.push(`<option value="${p}" ${p===selectedVal?'selected':''}>${p}</option>`));
-  return opts.join('');
+function buildPagoOptions(sel) {
+  return '<option value="">— Medio de pago —</option>'+(D.cfg.pagos||[]).map(p=>`<option value="${p}" ${p===sel?'selected':''}>${p}</option>`).join('');
+}
+function updateAllPagoSelects() {
+  ['f-pago','m-pago','w-pago','t-pago'].forEach(id=>{const e=document.getElementById(id);if(e) e.innerHTML=buildPagoOptions(e.value);});
 }
 
-function updateAllPagoSelects() {
-  ['f-pago','m-pago','w-pago','t-pago'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = buildPagoOptions(el.value);
-  });
+// ── Estado del toggle lleno ───────────────────────────────────
+let isLleno = false;
+function setLleno(val) {
+  isLleno = val;
+  document.getElementById('btn-parcial').className = 'lleno-btn'+(val?'':' active-parcial');
+  document.getElementById('btn-lleno').className = 'lleno-btn'+(val?' active-lleno':'');
 }
 
 // ══════════════════════════════════════════════════════════════
 // TABS
 // ══════════════════════════════════════════════════════════════
-function showTab(tab, el) {
+function showTab(tab,el) {
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.btab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
-  if (el) el.classList.add('active');
-  else document.querySelectorAll('.btab').forEach(b=>{ if((b.getAttribute('onclick')||'').includes("'"+tab+"'")) b.classList.add('active'); });
-  if (tab==='dashboard') renderDashboard();
-  if (tab==='trips') { renderSelects(); renderTripList(); }
-  if (tab==='fuel') { renderSelects(); renderFuelList(); }
-  if (tab==='wash') { renderSelects(); renderWashList(); }
-  if (tab==='maint') { renderSelects(); renderMaintList(); }
-  if (tab==='settings') renderSettings();
+  if(el) el.classList.add('active');
+  else document.querySelectorAll('.btab').forEach(b=>{if((b.getAttribute('onclick')||'').includes("'"+tab+"'")) b.classList.add('active');});
+  if(tab==='dashboard') renderDashboard();
+  if(tab==='trips') {renderSelects();renderTripList();}
+  if(tab==='fuel') {renderSelects();renderFuelList();}
+  if(tab==='wash') {renderSelects();renderWashList();}
+  if(tab==='maint') {renderSelects();renderMaintList();}
+  if(tab==='settings') renderSettings();
 }
 
 function renderSelects() {
-  const dests = D.cfg?.destinos||[];
-  const grifos = D.cfg?.grifos||[];
-  const lavs = D.cfg?.lavaderos||[];
-  const destOpts = '<option value="">-- Destinos frecuentes --</option>'+dests.map(d=>`<option value="${d}">${d}</option>`).join('');
-  const grifoOpts = '<option value="">-- Grifos frecuentes --</option>'+grifos.map(g=>`<option value="${g}">${g}</option>`).join('');
-  const lavOpts = '<option value="">-- Lavaderos frecuentes --</option>'+lavs.map(l=>`<option value="${l}">${l}</option>`).join('');
-  ['t-dest-sel'].forEach(id=>{ const e=document.getElementById(id); if(e) e.innerHTML=destOpts; });
-  ['f-grifo-sel'].forEach(id=>{ const e=document.getElementById(id); if(e) e.innerHTML=grifoOpts; });
-  ['w-lav-sel'].forEach(id=>{ const e=document.getElementById(id); if(e) e.innerHTML=lavOpts; });
+  const dests=D.cfg?.destinos||[],grifos=D.cfg?.grifos||[],lavs=D.cfg?.lavaderos||[];
+  const de=document.getElementById('t-dest-sel'); if(de) de.innerHTML='<option value="">-- Destinos frecuentes --</option>'+dests.map(d=>`<option value="${d}">${d}</option>`).join('');
+  const ge=document.getElementById('f-grifo-sel'); if(ge) ge.innerHTML='<option value="">-- Grifos frecuentes --</option>'+grifos.map(g=>`<option value="${g}">${g}</option>`).join('');
+  const le=document.getElementById('w-lav-sel'); if(le) le.innerHTML='<option value="">-- Lavaderos frecuentes --</option>'+lavs.map(l=>`<option value="${l}">${l}</option>`).join('');
   updateAllPagoSelects();
-  // fuel hints
-  const ftype = document.getElementById('fbtn-gas')?.classList.contains('ag') ? 'gasolina' : 'glp';
-  updateFuelHints(ftype);
+  updateFuelHints(fuelType);
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -526,106 +576,97 @@ function renderSelects() {
 // ══════════════════════════════════════════════════════════════
 function renderDashboard() {
   calcRendimientos();
-  const fuelTotal = D.fuel.reduce((s,r)=>s+r.cost,0);
-  const maintTotal = D.maintenance.reduce((s,r)=>s+r.cost,0);
-  const maxKm = getMaxKm();
-  const withRend = D.fuel.filter(r=>r.rendimiento);
-  const avgRend = withRend.length ? withRend.reduce((s,r)=>s+r.rendimiento,0)/withRend.length : null;
+  const fuelTotal=D.fuel.reduce((s,r)=>s+r.cost,0);
+  const maintTotal=D.maintenance.reduce((s,r)=>s+r.cost,0);
+  const maxKm=getMaxKm();
+  const withRend=D.fuel.filter(r=>r.rendimiento);
+  const avgRend=withRend.length?withRend.reduce((s,r)=>s+r.rendimiento,0)/withRend.length:null;
 
-  document.getElementById('s-km').textContent = maxKm ? maxKm.toLocaleString()+' km' : '— km';
-  document.getElementById('s-rend').textContent = avgRend ? avgRend.toFixed(1)+' km/L' : '— km/L';
-  document.getElementById('s-rend').style.color = rendColor(avgRend);
-  document.getElementById('s-rend-sub').textContent = withRend.length ? withRend.length+' tramo'+(withRend.length!==1?'s':'')+' medidos' : 'Necesitas 2+ cargas con km';
-  document.getElementById('s-fuel').textContent = 'S/ '+fuelTotal.toFixed(0);
-  document.getElementById('s-fuel-sub').textContent = D.fuel.length+' carga'+(D.fuel.length!==1?'s':'');
-  document.getElementById('s-maint').textContent = 'S/ '+maintTotal.toFixed(0);
-  document.getElementById('s-maint-sub').textContent = D.maintenance.length+' servicio'+(D.maintenance.length!==1?'s':'');
+  document.getElementById('s-km').textContent=maxKm?maxKm.toLocaleString()+' km':'— km';
+  document.getElementById('s-rend').textContent=avgRend?avgRend.toFixed(1)+' km/L':'— km/L';
+  document.getElementById('s-rend').style.color=rendColor(avgRend);
+  document.getElementById('s-rend-sub').textContent=withRend.length?withRend.length+' lleno'+(withRend.length!==1?'s':'')+' medidos':'Necesitas marcar "Tanque lleno"';
+  document.getElementById('s-fuel').textContent='S/ '+fuelTotal.toFixed(0);
+  document.getElementById('s-fuel-sub').textContent=D.fuel.length+' carga'+(D.fuel.length!==1?'s':'');
+  document.getElementById('s-maint').textContent='S/ '+maintTotal.toFixed(0);
+  document.getElementById('s-maint-sub').textContent=D.maintenance.length+' servicio'+(D.maintenance.length!==1?'s':'');
 
-  const cfg = D.cfg||{};
-  const nombre = [cfg.marca,cfg.modelo].filter(Boolean).join(' ')||'Tracker';
-  document.getElementById('hdr-name').textContent = nombre;
-  document.getElementById('hdr-badge').textContent = [cfg.modelo,cfg.anio].filter(Boolean).join(' · ')||'Config.';
-  if (maxKm) document.getElementById('hdr-km').textContent = maxKm.toLocaleString()+' km';
+  const cfg=D.cfg||{};
+  document.getElementById('hdr-name').textContent=[cfg.marca,cfg.modelo].filter(Boolean).join(' ')||'Tracker';
+  document.getElementById('hdr-badge').textContent=[cfg.modelo,cfg.anio].filter(Boolean).join(' · ')||'Config.';
+  if(maxKm) document.getElementById('hdr-km').textContent=maxKm.toLocaleString()+' km';
+
+  // Barra de tanque acumulado
+  const tank = getTankStatus();
+  const tankSection = document.getElementById('tank-bar-section');
+  if (D.fuel.length > 0) {
+    tankSection.style.display = 'block';
+    const fill = document.getElementById('tank-bar-fill');
+    const pct = tank.pct;
+    fill.style.width = pct+'%';
+    fill.style.background = pct>70?'var(--danger)':pct>40?'var(--fuel)':'var(--good)';
+    document.getElementById('tank-pct-label').textContent = pct.toFixed(0)+'%';
+    document.getElementById('tank-litros-label').textContent = tank.litrosAcum.toFixed(1)+'L acumulados / '+tank.tanque+'L tanque';
+    document.getElementById('tank-km-label').textContent = tank.kmRecorridos ? tank.kmRecorridos.toLocaleString()+' km desde último lleno' : '';
+  } else {
+    tankSection.style.display = 'none';
+  }
 
   // Alerts
-  const alerts = [];
-  if (maxKm) D.maintenance.forEach(m=>{
-    if (m.nextKm) {
-      const diff = m.nextKm - maxKm;
-      if (diff>0&&diff<=500) alerts.push(`⚠️ Mantenimiento (${maintLabel(m.type)}) en ${diff.toLocaleString()} km`);
-      else if (diff<=0) alerts.push(`🚨 Mantenimiento ${maintLabel(m.type)} VENCIDO`);
+  const alerts=[];
+  if(maxKm) D.maintenance.forEach(m=>{
+    if(m.nextKm){const diff=m.nextKm-maxKm;
+      if(diff>0&&diff<=500) alerts.push(`⚠️ Mantenimiento (${maintLabel(m.type)}) en ${diff.toLocaleString()} km`);
+      else if(diff<=0) alerts.push(`🚨 Mantenimiento ${maintLabel(m.type)} VENCIDO`);
     }
   });
-  if (D.wash.length) { const days=Math.floor((new Date()-new Date(D.wash[0].date))/86400000); if(days>14) alerts.push(`💧 Último lavado hace ${days} días`); }
-  if (withRend.length>=2 && withRend.slice(0,3).every(r=>r.rendimiento<9)) alerts.push('🔴 Rendimiento bajo — revisa llantas y filtros');
-  document.getElementById('dash-alerts').innerHTML = alerts.map(a=>`<div class="alert">${a}</div>`).join('');
+  if(D.wash.length){const days=Math.floor((new Date()-new Date(D.wash[0].date))/86400000);if(days>14) alerts.push(`💧 Último lavado hace ${days} días`);}
+  if(withRend.length>=2&&withRend.slice(0,3).every(r=>r.rendimiento<9)) alerts.push('🔴 Rendimiento bajo — revisa llantas y filtros');
+  // Alerta si acumuló más del 80% del tanque sin llenar
+  if(tank.pct>80) alerts.push(`⛽ Llevas ${tank.litrosAcum.toFixed(1)}L acumulados (${tank.pct.toFixed(0)}% del tanque). Considera llenar hasta el tope para medir rendimiento.`);
+  document.getElementById('dash-alerts').innerHTML=alerts.map(a=>`<div class="alert">${a}</div>`).join('');
 
-  // Chart — por cargas
-  const chartData = withRend.slice(0,6).reverse();
-  const chartEl = document.getElementById('dash-chart');
-  if (!chartData.length) {
-    chartEl.innerHTML = '<div class="empty"><div class="empty-icon">📈</div>Registra 2+ cargas con kilometraje para ver rendimiento</div>';
+  // Chart lleno a lleno
+  const chartEl=document.getElementById('dash-chart');
+  const chartData=withRend.slice(0,6).reverse();
+  if(!chartData.length){
+    chartEl.innerHTML='<div class="empty"><div class="empty-icon">📈</div>Marca "Tanque lleno" en al menos 2 cargas para ver rendimiento</div>';
   } else {
-    const maxR = Math.max(...chartData.map(r=>r.rendimiento));
-    chartEl.innerHTML = chartData.map(r=>{
-      const pct = (r.rendimiento/(maxR*1.1)*100).toFixed(0);
-      const c = rendColor(r.rendimiento);
-      const lbl = r.date.substring(5)+(r.station?' '+r.station.substring(0,6):'');
-      return `<div class="bar-row"><div class="bar-lbl">${lbl}</div><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${c}"></div></div><div class="bar-val" style="color:${c}">${r.rendimiento.toFixed(1)} km/L</div></div>`;
+    const maxR=Math.max(...chartData.map(r=>r.rendimiento));
+    chartEl.innerHTML=chartData.map(r=>{
+      const pct=(r.rendimiento/(maxR*1.1)*100).toFixed(0);
+      const c=rendColor(r.rendimiento);
+      const lbl=r.date.substring(5)+(r.station?' '+r.station.substring(0,6):'');
+      const sub=r.rendKm?` (${r.rendKm} km / ${r.rendLitros?.toFixed(1)}L)`:'';
+      return `<div class="bar-row"><div class="bar-lbl">${lbl}</div><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:${c}"></div></div><div class="bar-val" style="color:${c}">${r.rendimiento.toFixed(1)}</div></div>`;
     }).join('');
   }
 
-  // Recent log
-  const all = [
-    ...D.trips.map(r=>({...r,cat:'trips'})),
-    ...D.fuel.map(r=>({...r,cat:'fuel'})),
-    ...D.maintenance.map(r=>({...r,cat:'maint'})),
-    ...D.wash.map(r=>({...r,cat:'wash'})),
-  ].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);
-
-  const recentEl = document.getElementById('dash-recent');
-  if (!all.length) { recentEl.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Sin registros</div>'; return; }
-  recentEl.innerHTML = all.map(r=>{
+  // Recent
+  const all=[...D.trips.map(r=>({...r,cat:'trips'})),...D.fuel.map(r=>({...r,cat:'fuel'})),...D.maintenance.map(r=>({...r,cat:'maint'})),...D.wash.map(r=>({...r,cat:'wash'}))].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,8);
+  const recentEl=document.getElementById('dash-recent');
+  if(!all.length){recentEl.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Sin registros</div>';return;}
+  recentEl.innerHTML=all.map(r=>{
     let badge,title,meta,val;
-    if (r.cat==='trips') {
-      badge=`<span class="badge b-trip">Viaje</span>`;
-      title=r.label||'Sin etiqueta';
-      meta=`${fmtDate(r.date)} · ${r.kmStart?.toLocaleString()}→${r.kmEnd?.toLocaleString()} · <strong style="color:var(--trip)">${r.dist?.toLocaleString()} km</strong>`;
-      val=`<div class="rec-sub">${r.pago||''}</div>`;
-    } else if (r.cat==='fuel') {
-      badge=`<span class="badge ${r.type==='glp'?'b-glp':'b-gas'}">${r.type==='glp'?'GLP':'Gas.'}</span>`;
-      title=r.station||'Carga combustible';
-      meta=`${fmtDate(r.date)}${r.liters?' · '+r.liters.toFixed(1)+'L':''}${r.km?' · '+r.km.toLocaleString()+' km':''}${r.pago?' · '+r.pago:''}`;
-      const rend = r.rendimiento ? `<div class="rend-pill ${rendClass(r.rendimiento)}">${r.rendimiento.toFixed(1)} km/L</div>` : '';
-      val=`<div class="rec-val">S/${r.cost.toFixed(0)}</div>${rend}`;
-    } else if (r.cat==='maint') {
-      badge=`<span class="badge b-maint">Mant.</span>`;
-      title=maintLabel(r.type);
-      meta=`${fmtDate(r.date)}${r.km?' · '+r.km.toLocaleString()+' km':''}${r.pago?' · '+r.pago:''}`;
-      val=`<div class="rec-val">S/${r.cost.toFixed(0)}</div>`;
-    } else {
-      badge=`<span class="badge b-wash">Lavado</span>`;
-      title=washLabel(r.type);
-      meta=`${fmtDate(r.date)}${r.place?' · '+r.place:''}${r.pago?' · '+r.pago:''}`;
-      val=`<div class="rec-val">S/${r.cost.toFixed(0)}</div>`;
-    }
+    if(r.cat==='trips'){badge=`<span class="badge b-trip">Viaje</span>`;title=r.label||'Sin etiqueta';meta=`${fmtDate(r.date)} · ${r.kmStart?.toLocaleString()}→${r.kmEnd?.toLocaleString()} · <strong style="color:var(--trip)">${r.dist?.toLocaleString()} km</strong>`;val=`<div class="rec-sub">${r.pago||''}</div>`;}
+    else if(r.cat==='fuel'){badge=`<span class="badge ${r.type==='glp'?'b-glp':'b-gas'}">${r.type==='glp'?'GLP':'Gas.'}</span>`;title=(r.lleno?'🔋 ':'⚡ ')+(r.station||'Carga');meta=`${fmtDate(r.date)}${r.liters?' · '+r.liters.toFixed(1)+'L':''}${r.km?' · '+r.km.toLocaleString()+' km':''}${r.pago?' · '+r.pago:''}`;const rp=r.rendimiento?`<span class="rend-pill ${rendClass(r.rendimiento)}">${r.rendimiento.toFixed(1)} km/L</span>`:'';val=`<div class="rec-val">S/${r.cost.toFixed(0)}</div>${rp}`;}
+    else if(r.cat==='maint'){badge=`<span class="badge b-maint">Mant.</span>`;title=maintLabel(r.type);meta=`${fmtDate(r.date)}${r.km?' · '+r.km.toLocaleString()+' km':''}${r.pago?' · '+r.pago:''}`;val=`<div class="rec-val">S/${r.cost.toFixed(0)}</div>`;}
+    else{badge=`<span class="badge b-wash">Lavado</span>`;title=washLabel(r.type);meta=`${fmtDate(r.date)}${r.place?' · '+r.place:''}${r.pago?' · '+r.pago:''}`;val=`<div class="rec-val">S/${r.cost.toFixed(0)}</div>`;}
     return `<div class="rec-row">${badge}<div class="rec-info"><div class="rec-title">${title}</div><div class="rec-meta">${meta}</div></div><div class="rec-right">${val}</div></div>`;
   }).join('');
 }
 
 // ══════════════════════════════════════════════════════════════
-// VIAJES (simplificado — sin carga de combustible)
+// VIAJES
 // ══════════════════════════════════════════════════════════════
-let tripDraft = {};
-
-function tripGoTo(step) {
+let tripDraft={};
+function tripGoTo(step){
   document.querySelectorAll('.trip-step').forEach(s=>s.classList.remove('active'));
   document.getElementById('ts'+step).classList.add('active');
-  [1,2,3].forEach(i=>{ const d=document.getElementById('pd'+i); d.className='pdot'+(i<step?' done':i===step?' curr':''); });
-  [1,2].forEach(i=>{ document.getElementById('pl'+i).className='pline'+(i<step?' done':''); });
+  [1,2,3].forEach(i=>{const d=document.getElementById('pd'+i);d.className='pdot'+(i<step?' done':i===step?' curr':'');});
+  [1,2].forEach(i=>{document.getElementById('pl'+i).className='pline'+(i<step?' done':'');});
 }
-
-function tripNext1() {
+function tripNext1(){
   const date=document.getElementById('t-date').value;
   const kmStart=parseFloat(document.getElementById('t-km-start').value);
   const label=document.getElementById('t-label').value.trim()||document.getElementById('t-dest-sel').value||'';
@@ -634,15 +675,12 @@ function tripNext1() {
   tripDraft={date,kmStart,label,ftype};
   tripGoTo(2);
 }
-
-function tripNext2() {
+function tripNext2(){
   const kmEnd=parseFloat(document.getElementById('t-km-end').value);
   if(!kmEnd){alert('Ingresa el km de llegada');return;}
   if(kmEnd<=tripDraft.kmStart){alert('El km de llegada debe ser mayor al de salida');return;}
   const dist=kmEnd-tripDraft.kmStart;
-  const pago=document.getElementById('t-pago').value;
-  const notes=document.getElementById('t-notes').value.trim();
-  tripDraft={...tripDraft,kmEnd,dist,pago,notes};
+  tripDraft={...tripDraft,kmEnd,dist,pago:document.getElementById('t-pago').value,notes:document.getElementById('t-notes').value.trim()};
   document.getElementById('t-result').innerHTML=[
     {label:'Distancia',val:dist.toLocaleString()+' km',color:'var(--trip)'},
     {label:'Km inicio',val:tripDraft.kmStart.toLocaleString(),color:'var(--muted)'},
@@ -650,65 +688,36 @@ function tripNext2() {
   ].map(i=>`<div class="result-box"><div class="result-label">${i.label}</div><div class="result-val" style="color:${i.color}">${i.val}</div></div>`).join('');
   tripGoTo(3);
 }
-
-function tripSave() {
+function tripSave(){
   D.trips.unshift({id:genId(),...tripDraft});
   persist();
   tripDraft={};
   ['t-km-start','t-km-end','t-notes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   document.getElementById('t-date').value=today();
-  tripGoTo(1);
-  renderTripList();
-  renderDashboard();
+  tripGoTo(1);renderTripList();renderDashboard();
   alert('✅ Viaje guardado');
 }
-
-function renderTripList() {
+function renderTripList(){
   const el=document.getElementById('trip-list');
   document.getElementById('trip-count').textContent=D.trips.length+' viajes';
   if(!D.trips.length){el.innerHTML='<div class="empty"><div class="empty-icon">🗺️</div>Sin viajes</div>';return;}
-  el.innerHTML=D.trips.map(t=>`
-    <div class="rec-row">
-      <span class="badge b-trip" style="margin-top:2px;">Viaje</span>
-      <div class="rec-info">
-        <div class="rec-title">${t.label||'Sin etiqueta'}</div>
-        <div class="rec-meta">${fmtDate(t.date)} · ${t.kmStart?.toLocaleString()}→${t.kmEnd?.toLocaleString()} · <strong style="color:var(--trip)">${t.dist?.toLocaleString()} km</strong>${t.pago?' · '+t.pago:''}</div>
-        <div class="rec-actions">
-          <button class="btn btn-sm btn-edit" onclick="editTrip(${t.id})">✏️ Editar</button>
-          <button class="btn btn-sm btn-del" onclick="delRecord('trips',${t.id})">✕</button>
-        </div>
-      </div>
-    </div>`).join('');
+  el.innerHTML=D.trips.map(t=>`<div class="rec-row"><span class="badge b-trip" style="margin-top:2px;">Viaje</span><div class="rec-info"><div class="rec-title">${t.label||'Sin etiqueta'}</div><div class="rec-meta">${fmtDate(t.date)} · ${t.kmStart?.toLocaleString()}→${t.kmEnd?.toLocaleString()} · <strong style="color:var(--trip)">${t.dist?.toLocaleString()} km</strong>${t.pago?' · '+t.pago:''}</div><div class="rec-actions"><button class="btn btn-sm btn-edit" onclick="editTrip(${t.id})">✏️ Editar</button><button class="btn btn-sm btn-del" onclick="delRecord('trips',${t.id})">✕</button></div></div></div>`).join('');
 }
 
 // ══════════════════════════════════════════════════════════════
 // COMBUSTIBLE
 // ══════════════════════════════════════════════════════════════
-let fuelType = 'gasolina';
-
-function setFuelType(t) {
-  fuelType=t;
-  document.getElementById('fbtn-gas').className='fuel-btn'+(t==='gasolina'?' ag':'');
-  document.getElementById('fbtn-glp').className='fuel-btn'+(t==='glp'?' aglp':'');
-  updateFuelHints(t);
-  calcFuelLiters();
-}
-
-function updateFuelHints(t) {
-  const [sl,pl]=fuelHints(t||fuelType);
-  const slEl=document.getElementById('f-soles-lbl'); if(slEl) slEl.textContent=sl;
-  const plEl=document.getElementById('f-precio-lbl'); if(plEl) plEl.textContent=pl;
-}
-
-function calcFuelLiters() {
+let fuelType='gasolina';
+function setFuelType(t){fuelType=t;document.getElementById('fbtn-gas').className='fuel-btn'+(t==='gasolina'?' ag':'');document.getElementById('fbtn-glp').className='fuel-btn'+(t==='glp'?' aglp':'');updateFuelHints(t);calcFuelLiters();}
+function updateFuelHints(t){const [sl,pl]=fuelHints(t||fuelType);const slEl=document.getElementById('f-soles-lbl');if(slEl)slEl.textContent=sl;const plEl=document.getElementById('f-precio-lbl');if(plEl)plEl.textContent=pl;}
+function calcFuelLiters(){
   const soles=parseFloat(document.getElementById('f-soles')?.value)||0;
   const precio=parseFloat(document.getElementById('f-precio')?.value)||0;
   const liters=calcLiters(soles,precio,fuelType);
   const hint=document.getElementById('f-liters-hint');
-  if(hint) hint.innerHTML=liters&&liters>0?`<span class="good">→ ${liters.toFixed(2)} litros · S/ ${(soles/liters).toFixed(2)} por litro</span>`:'';
+  if(hint) hint.innerHTML=liters&&liters>0?`<span style="color:var(--good)">→ ${liters.toFixed(2)} litros · S/ ${(soles/liters).toFixed(2)}/L</span>`:'';
 }
-
-function saveFuel() {
+function saveFuel(){
   const date=document.getElementById('f-date').value;
   const soles=parseFloat(document.getElementById('f-soles').value);
   const precio=parseFloat(document.getElementById('f-precio').value);
@@ -718,417 +727,170 @@ function saveFuel() {
   const notes=document.getElementById('f-notes').value.trim();
   if(!date||!soles||!precio){alert('Completa fecha, soles y precio');return;}
   const liters=calcLiters(soles,precio,fuelType);
-  D.fuel.unshift({id:genId(),date,type:fuelType,liters,cost:soles,precio,km,station,pago,notes});
-  calcRendimientos();
-  persist();
+  D.fuel.unshift({id:genId(),date,type:fuelType,liters,cost:soles,precio,km,station,pago,notes,lleno:isLleno});
+  calcRendimientos();persist();
   ['f-soles','f-precio','f-km','f-station','f-notes'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-liters-hint').textContent='';
   document.getElementById('f-date').value=today();
-  renderFuelList();
-  renderDashboard();
+  setLleno(false);
+  renderFuelList();renderDashboard();
 }
-
-function renderFuelList() {
+function renderFuelList(){
   calcRendimientos();
   const el=document.getElementById('fuel-list');
   document.getElementById('fuel-count').textContent=D.fuel.length+' registros';
   if(!D.fuel.length){el.innerHTML='<div class="empty"><div class="empty-icon">⛽</div>Sin cargas</div>';return;}
-  el.innerHTML=D.fuel.map(r=>`
-    <div class="rec-row">
-      <span class="badge ${r.type==='glp'?'b-glp':'b-gas'}" style="margin-top:2px;">${r.type==='glp'?'GLP':'Gas.'}</span>
-      <div class="rec-info">
-        <div class="rec-title">${r.station||'Carga combustible'}</div>
-        <div class="rec-meta">${fmtDate(r.date)}${r.liters?' · '+r.liters.toFixed(1)+'L':''}${r.km?' · '+r.km.toLocaleString()+' km':''}${r.pago?' · '+r.pago:''}</div>
-        ${r.rendimiento?`<div class="rend-pill ${rendClass(r.rendimiento)}" style="margin-top:4px;">${r.rendimiento.toFixed(1)} km/L desde última carga</div>`:'<div style="font-size:10px;color:var(--muted);margin-top:3px;">Sin rendimiento aún</div>'}
-        <div class="rec-actions">
-          <button class="btn btn-sm btn-edit" onclick="editFuel(${r.id})">✏️ Editar</button>
-          <button class="btn btn-sm btn-del" onclick="delRecord('fuel',${r.id})">✕</button>
-        </div>
-      </div>
-      <div class="rec-right"><div class="rec-val">S/${r.cost.toFixed(0)}</div>${r.liters?`<div class="rec-sub">S/${(r.cost/r.liters).toFixed(2)}/L</div>`:''}</div>
-    </div>`).join('');
+  el.innerHTML=D.fuel.map(r=>`<div class="rec-row"><span class="badge ${r.type==='glp'?'b-glp':'b-gas'}" style="margin-top:2px;">${r.type==='glp'?'GLP':'Gas.'}</span><div class="rec-info"><div class="rec-title">${r.lleno?'<span class="lleno-badge">🔋 Lleno</span> ':''}${r.station||'Carga combustible'}</div><div class="rec-meta">${fmtDate(r.date)}${r.liters?' · '+r.liters.toFixed(1)+'L':''}${r.km?' · '+r.km.toLocaleString()+' km':''}${r.pago?' · '+r.pago:''}</div>${r.rendimiento?`<div class="rend-pill ${rendClass(r.rendimiento)}" style="margin-top:4px;">${r.rendimiento.toFixed(1)} km/L · ${r.rendKm} km / ${r.rendLitros?.toFixed(1)}L</div>`:'<div style="font-size:10px;color:var(--muted);margin-top:3px;">${r.lleno?"Primer lleno registrado":"Carga parcial — sin rendimiento"}</div>'}<div class="rec-actions"><button class="btn btn-sm btn-edit" onclick="editFuel(${r.id})">✏️ Editar</button><button class="btn btn-sm btn-del" onclick="delRecord('fuel',${r.id})">✕</button></div></div><div class="rec-right"><div class="rec-val">S/${r.cost.toFixed(0)}</div>${r.liters?`<div class="rec-sub">S/${(r.cost/r.liters).toFixed(2)}/L</div>`:''}</div></div>`).join('');
 }
 
 // ══════════════════════════════════════════════════════════════
 // MANTENIMIENTO
 // ══════════════════════════════════════════════════════════════
-function saveMaint() {
-  const date=document.getElementById('m-date').value;
-  const type=document.getElementById('m-type').value;
-  const cost=parseFloat(document.getElementById('m-cost').value);
-  const km=parseFloat(document.getElementById('m-km').value)||null;
-  const nextKm=parseFloat(document.getElementById('m-next-km').value)||null;
-  const shop=document.getElementById('m-shop').value.trim();
-  const pago=document.getElementById('m-pago').value;
-  const notes=document.getElementById('m-notes').value.trim();
+function saveMaint(){
+  const date=document.getElementById('m-date').value,type=document.getElementById('m-type').value,cost=parseFloat(document.getElementById('m-cost').value),km=parseFloat(document.getElementById('m-km').value)||null,nextKm=parseFloat(document.getElementById('m-next-km').value)||null,shop=document.getElementById('m-shop').value.trim(),pago=document.getElementById('m-pago').value,notes=document.getElementById('m-notes').value.trim();
   if(!date||!cost){alert('Completa fecha y costo');return;}
   D.maintenance.unshift({id:genId(),date,type,cost,km,nextKm,shop,pago,notes});
-  persist();
-  ['m-cost','m-km','m-next-km','m-shop','m-notes'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('m-date').value=today();
-  renderMaintList(); renderDashboard();
+  persist();['m-cost','m-km','m-next-km','m-shop','m-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('m-date').value=today();renderMaintList();renderDashboard();
 }
-
-function renderMaintList() {
+function renderMaintList(){
   const el=document.getElementById('maint-list');
   if(!D.maintenance.length){el.innerHTML='<div class="empty"><div class="empty-icon">🔧</div>Sin mantenimientos</div>';return;}
-  el.innerHTML=D.maintenance.map(r=>`
-    <div class="rec-row">
-      <span class="badge b-maint" style="margin-top:2px;">Mant.</span>
-      <div class="rec-info">
-        <div class="rec-title">${maintLabel(r.type)}</div>
-        <div class="rec-meta">${fmtDate(r.date)}${r.km?' · '+r.km.toLocaleString()+' km':''}${r.nextKm?' · Próx: '+r.nextKm.toLocaleString()+' km':''}${r.shop?' · '+r.shop:''}${r.pago?' · '+r.pago:''}</div>
-        <div class="rec-actions">
-          <button class="btn btn-sm btn-edit" onclick="editMaint(${r.id})">✏️ Editar</button>
-          <button class="btn btn-sm btn-del" onclick="delRecord('maintenance',${r.id})">✕</button>
-        </div>
-      </div>
-      <div class="rec-right"><div class="rec-val" style="color:var(--maint)">S/${r.cost.toFixed(0)}</div></div>
-    </div>`).join('');
+  el.innerHTML=D.maintenance.map(r=>`<div class="rec-row"><span class="badge b-maint" style="margin-top:2px;">Mant.</span><div class="rec-info"><div class="rec-title">${maintLabel(r.type)}</div><div class="rec-meta">${fmtDate(r.date)}${r.km?' · '+r.km.toLocaleString()+' km':''}${r.nextKm?' · Próx: '+r.nextKm.toLocaleString()+' km':''}${r.shop?' · '+r.shop:''}${r.pago?' · '+r.pago:''}</div><div class="rec-actions"><button class="btn btn-sm btn-edit" onclick="editMaint(${r.id})">✏️ Editar</button><button class="btn btn-sm btn-del" onclick="delRecord('maintenance',${r.id})">✕</button></div></div><div class="rec-right"><div class="rec-val" style="color:var(--maint)">S/${r.cost.toFixed(0)}</div></div></div>`).join('');
 }
 
 // ══════════════════════════════════════════════════════════════
 // LAVADOS
 // ══════════════════════════════════════════════════════════════
-function saveWash() {
-  const date=document.getElementById('w-date').value;
-  const type=document.getElementById('w-type').value;
-  const cost=parseFloat(document.getElementById('w-cost').value);
-  const place=document.getElementById('w-place').value.trim()||document.getElementById('w-lav-sel').value||'';
-  const pago=document.getElementById('w-pago').value;
-  const notes=document.getElementById('w-notes').value.trim();
+function saveWash(){
+  const date=document.getElementById('w-date').value,type=document.getElementById('w-type').value,cost=parseFloat(document.getElementById('w-cost').value),place=document.getElementById('w-place').value.trim()||document.getElementById('w-lav-sel').value||'',pago=document.getElementById('w-pago').value,notes=document.getElementById('w-notes').value.trim();
   if(!date||!cost){alert('Completa fecha y costo');return;}
-  D.wash.unshift({id:genId(),date,type,cost,place,pago,notes});
-  persist();
-  ['w-cost','w-place','w-notes'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('w-date').value=today();
-  renderWashList(); renderDashboard();
+  D.wash.unshift({id:genId(),date,type,cost,place,pago,notes});persist();
+  ['w-cost','w-place','w-notes'].forEach(id=>document.getElementById(id).value='');document.getElementById('w-date').value=today();renderWashList();renderDashboard();
 }
-
-function renderWashList() {
+function renderWashList(){
   const el=document.getElementById('wash-list');
   if(!D.wash.length){el.innerHTML='<div class="empty"><div class="empty-icon">🚿</div>Sin lavados</div>';return;}
-  el.innerHTML=D.wash.map(r=>`
-    <div class="rec-row">
-      <span class="badge b-wash" style="margin-top:2px;">Lavado</span>
-      <div class="rec-info">
-        <div class="rec-title">${washLabel(r.type)}</div>
-        <div class="rec-meta">${fmtDate(r.date)}${r.place?' · '+r.place:''}${r.pago?' · '+r.pago:''}</div>
-        <div class="rec-actions">
-          <button class="btn btn-sm btn-edit" onclick="editWash(${r.id})">✏️ Editar</button>
-          <button class="btn btn-sm btn-del" onclick="delRecord('wash',${r.id})">✕</button>
-        </div>
-      </div>
-      <div class="rec-right"><div class="rec-val" style="color:var(--wash)">S/${r.cost.toFixed(0)}</div></div>
-    </div>`).join('');
+  el.innerHTML=D.wash.map(r=>`<div class="rec-row"><span class="badge b-wash" style="margin-top:2px;">Lavado</span><div class="rec-info"><div class="rec-title">${washLabel(r.type)}</div><div class="rec-meta">${fmtDate(r.date)}${r.place?' · '+r.place:''}${r.pago?' · '+r.pago:''}</div><div class="rec-actions"><button class="btn btn-sm btn-edit" onclick="editWash(${r.id})">✏️ Editar</button><button class="btn btn-sm btn-del" onclick="delRecord('wash',${r.id})">✕</button></div></div><div class="rec-right"><div class="rec-val" style="color:var(--wash)">S/${r.cost.toFixed(0)}</div></div></div>`).join('');
 }
 
 // ══════════════════════════════════════════════════════════════
 // CONFIGURACIÓN
 // ══════════════════════════════════════════════════════════════
-function renderSettings() {
+function renderSettings(){
   const cfg=D.cfg||{};
-  document.getElementById('cfg-marca').value=cfg.marca||'';
-  document.getElementById('cfg-modelo').value=cfg.modelo||'';
-  document.getElementById('cfg-anio').value=cfg.anio||'';
-  document.getElementById('cfg-placa').value=cfg.placa||'';
+  document.getElementById('cfg-marca').value=cfg.marca||'';document.getElementById('cfg-modelo').value=cfg.modelo||'';
+  document.getElementById('cfg-anio').value=cfg.anio||'';document.getElementById('cfg-placa').value=cfg.placa||'';
+  document.getElementById('cfg-tanque').value=cfg.tanque||42;
   ['pagos','destinos','grifos','lavaderos'].forEach(k=>renderTags(k));
 }
-
-function saveVehicle() {
+function saveVehicle(){
   if(!D.cfg) D.cfg={};
-  D.cfg.marca=document.getElementById('cfg-marca').value.trim();
-  D.cfg.modelo=document.getElementById('cfg-modelo').value.trim();
-  D.cfg.anio=document.getElementById('cfg-anio').value.trim();
-  D.cfg.placa=document.getElementById('cfg-placa').value.trim();
-  persist(); renderDashboard(); alert('✅ Vehículo guardado');
+  D.cfg.marca=document.getElementById('cfg-marca').value.trim();D.cfg.modelo=document.getElementById('cfg-modelo').value.trim();
+  D.cfg.anio=document.getElementById('cfg-anio').value.trim();D.cfg.placa=document.getElementById('cfg-placa').value.trim();
+  D.cfg.tanque=parseFloat(document.getElementById('cfg-tanque').value)||42;
+  persist();renderDashboard();alert('✅ Vehículo guardado');
 }
-
-function renderTags(key) {
-  const el=document.getElementById('tag-'+key);
-  if(!el) return;
-  const items=D.cfg?.[key]||[];
-  el.innerHTML=items.map((it,i)=>`<div class="tag">${it}<span class="tag-del" onclick="removeTag('${key}',${i})">×</span></div>`).join('');
-}
-
-function addTag(key,inputId) {
-  const val=document.getElementById(inputId).value.trim();
-  if(!val) return;
-  if(!D.cfg[key]) D.cfg[key]=[];
-  if(!D.cfg[key].includes(val)){ D.cfg[key].push(val); persist(); renderTags(key); }
-  document.getElementById(inputId).value='';
-  renderSelects();
-}
-
-function removeTag(key,idx) {
-  D.cfg[key].splice(idx,1); persist(); renderTags(key); renderSelects();
-}
+function renderTags(key){const el=document.getElementById('tag-'+key);if(!el)return;const items=D.cfg?.[key]||[];el.innerHTML=items.map((it,i)=>`<div class="tag">${it}<span class="tag-del" onclick="removeTag('${key}',${i})">×</span></div>`).join('');}
+function addTag(key,inputId){const val=document.getElementById(inputId).value.trim();if(!val)return;if(!D.cfg[key])D.cfg[key]=[];if(!D.cfg[key].includes(val)){D.cfg[key].push(val);persist();renderTags(key);}document.getElementById(inputId).value='';renderSelects();}
+function removeTag(key,idx){D.cfg[key].splice(idx,1);persist();renderTags(key);renderSelects();}
 
 // ══════════════════════════════════════════════════════════════
 // EXPORTAR CSV
 // ══════════════════════════════════════════════════════════════
-function toCSV(rows, headers) {
-  const esc = v => {
-    if (v === null || v === undefined) return '';
-    const s = String(v);
-    return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g,'""') + '"' : s;
-  };
-  return [headers.join(','), ...rows.map(r => headers.map(h => esc(r[h])).join(','))].join('\n');
-}
-
-function downloadCSV(content, filename) {
-  const blob = new Blob(['\uFEFF' + content, {type:'text/csv;charset=utf-8;'}]);
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function exportCSV(type) {
+function toCSV(rows,headers){const esc=v=>{if(v===null||v===undefined)return '';const s=String(v);return s.includes(',')||s.includes('"')||s.includes('\n')?'"'+s.replace(/"/g,'""')+'"':s;};return[headers.join(','),...rows.map(r=>headers.map(h=>esc(r[h])).join(','))].join('\n');}
+function downloadCSV(content,filename){const blob=new Blob(['\uFEFF'+content],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);}
+function exportCSV(type){
   calcRendimientos();
-  const fecha = today();
-  const veh = [D.cfg?.marca, D.cfg?.modelo, D.cfg?.anio].filter(Boolean).join(' ') || 'vehiculo';
-
-  if (type === 'fuel' || type === 'all') {
-    const rows = D.fuel.map(r => ({
-      fecha: r.date, tipo: r.type, grifo: r.station||'',
-      soles: r.cost, litros: r.liters?.toFixed(2)||'',
-      precio_galon: r.precio||'', km: r.km||'',
-      rendimiento_kmL: r.rendimiento?.toFixed(2)||'',
-      pago: r.pago||'', notas: r.notes||''
-    }));
-    const csv = toCSV(rows, ['fecha','tipo','grifo','soles','litros','precio_galon','km','rendimiento_kmL','pago','notas']);
-    if (type === 'fuel') { downloadCSV(csv, `combustible_${veh}_${fecha}.csv`); return; }
-  }
-
-  if (type === 'maintenance' || type === 'all') {
-    const rows = D.maintenance.map(r => ({
-      fecha: r.date, tipo: maintLabel(r.type), taller: r.shop||'',
-      costo: r.cost, km: r.km||'', proximo_km: r.nextKm||'',
-      pago: r.pago||'', notas: r.notes||''
-    }));
-    const csv = toCSV(rows, ['fecha','tipo','taller','costo','km','proximo_km','pago','notas']);
-    if (type === 'maintenance') { downloadCSV(csv, `mantenimiento_${veh}_${fecha}.csv`); return; }
-  }
-
-  if (type === 'wash' || type === 'all') {
-    const rows = D.wash.map(r => ({
-      fecha: r.date, tipo: washLabel(r.type), lavadero: r.place||'',
-      costo: r.cost, pago: r.pago||'', notas: r.notes||''
-    }));
-    const csv = toCSV(rows, ['fecha','tipo','lavadero','costo','pago','notas']);
-    if (type === 'wash') { downloadCSV(csv, `lavados_${veh}_${fecha}.csv`); return; }
-  }
-
-  if (type === 'trips' || type === 'all') {
-    const rows = D.trips.map(r => ({
-      fecha: r.date, destino: r.label||'', combustible: r.ftype||'',
-      km_inicio: r.kmStart, km_llegada: r.kmEnd, distancia_km: r.dist,
-      pago: r.pago||'', notas: r.notes||''
-    }));
-    const csv = toCSV(rows, ['fecha','destino','combustible','km_inicio','km_llegada','distancia_km','pago','notas']);
-    if (type === 'trips') { downloadCSV(csv, `viajes_${veh}_${fecha}.csv`); return; }
-  }
-
-  // ALL — combine in one file with sections
-  if (type === 'all') {
-    calcRendimientos();
-    const fuelRows = D.fuel.map(r => ({
-      fecha:r.date, categoria:'Combustible', descripcion:r.type+' - '+(r.station||''),
-      costo:r.cost, litros:r.liters?.toFixed(2)||'', km:r.km||'',
-      rendimiento:r.rendimiento?.toFixed(2)||'', pago:r.pago||'', notas:r.notes||''
-    }));
-    const maintRows = D.maintenance.map(r => ({
-      fecha:r.date, categoria:'Mantenimiento', descripcion:maintLabel(r.type)+' - '+(r.shop||''),
-      costo:r.cost, litros:'', km:r.km||'', rendimiento:'', pago:r.pago||'', notas:r.notes||''
-    }));
-    const washRows = D.wash.map(r => ({
-      fecha:r.date, categoria:'Lavado', descripcion:washLabel(r.type)+' - '+(r.place||''),
-      costo:r.cost, litros:'', km:'', rendimiento:'', pago:r.pago||'', notas:r.notes||''
-    }));
-    const tripRows = D.trips.map(r => ({
-      fecha:r.date, categoria:'Viaje', descripcion:(r.label||'Sin etiqueta'),
-      costo:0, litros:'', km:r.dist||'', rendimiento:'', pago:r.pago||'', notas:r.notes||''
-    }));
-    const allRows = [...fuelRows,...maintRows,...washRows,...tripRows].sort((a,b)=>b.fecha.localeCompare(a.fecha));
-    const csv = toCSV(allRows, ['fecha','categoria','descripcion','costo','litros','km','rendimiento','pago','notas']);
-    downloadCSV(csv, `gastos_vehiculo_${veh}_${fecha}.csv`);
-  }
+  const fecha=today();const veh=[D.cfg?.marca,D.cfg?.modelo,D.cfg?.anio].filter(Boolean).join(' ')||'vehiculo';
+  if(type==='fuel'||type==='all'){const rows=D.fuel.map(r=>({fecha:r.date,tipo:r.type,grifo:r.station||'',soles:r.cost,litros:r.liters?.toFixed(2)||'',precio_galon:r.precio||'',km:r.km||'',lleno:r.lleno?'Si':'No',rendimiento_kmL:r.rendimiento?.toFixed(2)||'',km_tramo:r.rendKm||'',pago:r.pago||'',notas:r.notes||''}));const csv=toCSV(rows,['fecha','tipo','grifo','soles','litros','precio_galon','km','lleno','rendimiento_kmL','km_tramo','pago','notas']);if(type==='fuel'){downloadCSV(csv,`combustible_${veh}_${fecha}.csv`);return;}}
+  if(type==='maintenance'||type==='all'){const rows=D.maintenance.map(r=>({fecha:r.date,tipo:maintLabel(r.type),taller:r.shop||'',costo:r.cost,km:r.km||'',proximo_km:r.nextKm||'',pago:r.pago||'',notas:r.notes||''}));const csv=toCSV(rows,['fecha','tipo','taller','costo','km','proximo_km','pago','notas']);if(type==='maintenance'){downloadCSV(csv,`mantenimiento_${veh}_${fecha}.csv`);return;}}
+  if(type==='wash'||type==='all'){const rows=D.wash.map(r=>({fecha:r.date,tipo:washLabel(r.type),lavadero:r.place||'',costo:r.cost,pago:r.pago||'',notas:r.notes||''}));const csv=toCSV(rows,['fecha','tipo','lavadero','costo','pago','notas']);if(type==='wash'){downloadCSV(csv,`lavados_${veh}_${fecha}.csv`);return;}}
+  if(type==='trips'||type==='all'){const rows=D.trips.map(r=>({fecha:r.date,destino:r.label||'',combustible:r.ftype||'',km_inicio:r.kmStart,km_llegada:r.kmEnd,distancia_km:r.dist,pago:r.pago||'',notas:r.notes||''}));const csv=toCSV(rows,['fecha','destino','combustible','km_inicio','km_llegada','distancia_km','pago','notas']);if(type==='trips'){downloadCSV(csv,`viajes_${veh}_${fecha}.csv`);return;}}
+  if(type==='all'){const fuelRows=D.fuel.map(r=>({fecha:r.date,categoria:'Combustible',descripcion:(r.lleno?'[LLENO] ':'')+r.type+' - '+(r.station||''),costo:r.cost,litros:r.liters?.toFixed(2)||'',km:r.km||'',rendimiento:r.rendimiento?.toFixed(2)||'',pago:r.pago||'',notas:r.notes||''}));const maintRows=D.maintenance.map(r=>({fecha:r.date,categoria:'Mantenimiento',descripcion:maintLabel(r.type)+' - '+(r.shop||''),costo:r.cost,litros:'',km:r.km||'',rendimiento:'',pago:r.pago||'',notas:r.notes||''}));const washRows=D.wash.map(r=>({fecha:r.date,categoria:'Lavado',descripcion:washLabel(r.type)+' - '+(r.place||''),costo:r.cost,litros:'',km:'',rendimiento:'',pago:r.pago||'',notas:r.notes||''}));const tripRows=D.trips.map(r=>({fecha:r.date,categoria:'Viaje',descripcion:r.label||'Sin etiqueta',costo:0,litros:'',km:r.dist||'',rendimiento:'',pago:r.pago||'',notas:r.notes||''}));const allRows=[...fuelRows,...maintRows,...washRows,...tripRows].sort((a,b)=>b.fecha.localeCompare(a.fecha));const csv=toCSV(allRows,['fecha','categoria','descripcion','costo','litros','km','rendimiento','pago','notas']);downloadCSV(csv,`gastos_vehiculo_${veh}_${fecha}.csv`);}
 }
 
 // ══════════════════════════════════════════════════════════════
 // EDITAR
 // ══════════════════════════════════════════════════════════════
-function openModal(title, html) {
-  document.getElementById('edit-modal-title').textContent = title;
-  document.getElementById('edit-modal-body').innerHTML = html;
-  document.getElementById('edit-modal').classList.add('open');
-}
-function closeModal() { document.getElementById('edit-modal').classList.remove('open'); }
+function openModal(title,html){document.getElementById('edit-modal-title').textContent=title;document.getElementById('edit-modal-body').innerHTML=html;document.getElementById('edit-modal').classList.add('open');}
+function closeModal(){document.getElementById('edit-modal').classList.remove('open');}
+function pagoSel(val){return `<select id="ep-pago">${buildPagoOptions(val)}</select>`;}
+function llenoSel(val){return `<select id="ep-lleno"><option value="0" ${!val?'selected':''}>⚡ Carga parcial</option><option value="1" ${val?'selected':''}>🔋 Tanque lleno</option></select>`;}
 
-function pagoSel(val) { return `<select id="ep-pago">${buildPagoOptions(val)}</select>`; }
-
-function editFuel(id) {
-  const r=D.fuel.find(x=>x.id===id); if(!r) return;
-  const [sl,pl]=fuelHints(r.type);
+function editFuel(id){
+  const r=D.fuel.find(x=>x.id===id);if(!r)return;
+  const[sl,pl]=fuelHints(r.type);
   openModal('✏️ Editar carga',`
+    <div class="form-group"><label>Tipo de carga</label>${llenoSel(r.lleno)}</div>
     <div class="form-group"><label>Fecha</label><input type="date" id="ef-date" value="${r.date}"></div>
-    <div class="form-row">
-      <div class="form-group"><label>${sl}</label><input type="number" id="ef-soles" value="${r.cost}" step="0.1"></div>
-      <div class="form-group"><label>${pl}</label><input type="number" id="ef-precio" value="${r.precio||''}" step="0.01"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Km</label><input type="number" id="ef-km" value="${r.km||''}"></div>
-      <div class="form-group"><label>Grifo</label><input type="text" id="ef-station" value="${r.station||''}"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Medio de pago</label>${pagoSel(r.pago)}</div>
-      <div class="form-group"><label>Notas</label><input type="text" id="ef-notes" value="${r.notes||''}"></div>
-    </div>
+    <div class="form-row"><div class="form-group"><label>${sl}</label><input type="number" id="ef-soles" value="${r.cost}" step="0.1"></div><div class="form-group"><label>${pl}</label><input type="number" id="ef-precio" value="${r.precio||''}" step="0.01"></div></div>
+    <div class="form-row"><div class="form-group"><label>Km</label><input type="number" id="ef-km" value="${r.km||''}"></div><div class="form-group"><label>Grifo</label><input type="text" id="ef-station" value="${r.station||''}"></div></div>
+    <div class="form-row"><div class="form-group"><label>Medio de pago</label>${pagoSel(r.pago)}</div><div class="form-group"><label>Notas</label><input type="text" id="ef-notes" value="${r.notes||''}"></div></div>
     <button class="btn btn-primary" onclick="saveEditFuel(${id})">💾 Guardar</button>
   `);
 }
-
-function saveEditFuel(id) {
-  const r=D.fuel.find(x=>x.id===id); if(!r) return;
-  r.date=document.getElementById('ef-date').value;
-  r.cost=parseFloat(document.getElementById('ef-soles').value)||r.cost;
-  r.precio=parseFloat(document.getElementById('ef-precio').value)||r.precio;
-  r.liters=calcLiters(r.cost,r.precio,r.type)||r.liters;
-  r.km=parseFloat(document.getElementById('ef-km').value)||null;
-  r.station=document.getElementById('ef-station').value.trim();
-  r.pago=document.getElementById('ep-pago').value;
-  r.notes=document.getElementById('ef-notes').value.trim();
-  calcRendimientos(); persist(); closeModal(); renderFuelList(); renderDashboard();
+function saveEditFuel(id){
+  const r=D.fuel.find(x=>x.id===id);if(!r)return;
+  r.date=document.getElementById('ef-date').value;r.cost=parseFloat(document.getElementById('ef-soles').value)||r.cost;r.precio=parseFloat(document.getElementById('ef-precio').value)||r.precio;r.liters=calcLiters(r.cost,r.precio,r.type)||r.liters;r.km=parseFloat(document.getElementById('ef-km').value)||null;r.station=document.getElementById('ef-station').value.trim();r.pago=document.getElementById('ep-pago').value;r.notes=document.getElementById('ef-notes').value.trim();r.lleno=document.getElementById('ep-lleno').value==='1';
+  calcRendimientos();persist();closeModal();renderFuelList();renderDashboard();
 }
-
-function editMaint(id) {
-  const r=D.maintenance.find(x=>x.id===id); if(!r) return;
-  openModal('✏️ Editar mantenimiento',`
-    <div class="form-row">
-      <div class="form-group"><label>Fecha</label><input type="date" id="em-date" value="${r.date}"></div>
-      <div class="form-group"><label>Costo (S/)</label><input type="number" id="em-cost" value="${r.cost}" step="0.1"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Km</label><input type="number" id="em-km" value="${r.km||''}"></div>
-      <div class="form-group"><label>Próximo km</label><input type="number" id="em-nextKm" value="${r.nextKm||''}"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Taller</label><input type="text" id="em-shop" value="${r.shop||''}"></div>
-      <div class="form-group"><label>Medio de pago</label>${pagoSel(r.pago)}</div>
-    </div>
-    <div class="form-group"><label>Notas</label><textarea id="em-notes">${r.notes||''}</textarea></div>
-    <button class="btn btn-primary" onclick="saveEditMaint(${id})">💾 Guardar</button>
-  `);
+function editMaint(id){
+  const r=D.maintenance.find(x=>x.id===id);if(!r)return;
+  openModal('✏️ Editar mantenimiento',`<div class="form-row"><div class="form-group"><label>Fecha</label><input type="date" id="em-date" value="${r.date}"></div><div class="form-group"><label>Costo (S/)</label><input type="number" id="em-cost" value="${r.cost}" step="0.1"></div></div><div class="form-row"><div class="form-group"><label>Km</label><input type="number" id="em-km" value="${r.km||''}"></div><div class="form-group"><label>Próximo km</label><input type="number" id="em-nextKm" value="${r.nextKm||''}"></div></div><div class="form-row"><div class="form-group"><label>Taller</label><input type="text" id="em-shop" value="${r.shop||''}"></div><div class="form-group"><label>Medio de pago</label>${pagoSel(r.pago)}</div></div><div class="form-group"><label>Notas</label><textarea id="em-notes">${r.notes||''}</textarea></div><button class="btn btn-primary" onclick="saveEditMaint(${id})">💾 Guardar</button>`);
 }
-
-function saveEditMaint(id) {
-  const r=D.maintenance.find(x=>x.id===id); if(!r) return;
-  r.date=document.getElementById('em-date').value;
-  r.cost=parseFloat(document.getElementById('em-cost').value)||r.cost;
-  r.km=parseFloat(document.getElementById('em-km').value)||null;
-  r.nextKm=parseFloat(document.getElementById('em-nextKm').value)||null;
-  r.shop=document.getElementById('em-shop').value.trim();
-  r.pago=document.getElementById('ep-pago').value;
-  r.notes=document.getElementById('em-notes').value.trim();
-  persist(); closeModal(); renderMaintList(); renderDashboard();
-}
-
-function editWash(id) {
-  const r=D.wash.find(x=>x.id===id); if(!r) return;
-  openModal('✏️ Editar lavado',`
-    <div class="form-row">
-      <div class="form-group"><label>Fecha</label><input type="date" id="ew-date" value="${r.date}"></div>
-      <div class="form-group"><label>Costo (S/)</label><input type="number" id="ew-cost" value="${r.cost}" step="0.1"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Lavadero</label><input type="text" id="ew-place" value="${r.place||''}"></div>
-      <div class="form-group"><label>Medio de pago</label>${pagoSel(r.pago)}</div>
-    </div>
-    <div class="form-group"><label>Notas</label><input type="text" id="ew-notes" value="${r.notes||''}"></div>
-    <button class="btn btn-primary" onclick="saveEditWash(${id})">💾 Guardar</button>
-  `);
-}
-
-function saveEditWash(id) {
-  const r=D.wash.find(x=>x.id===id); if(!r) return;
-  r.date=document.getElementById('ew-date').value;
-  r.cost=parseFloat(document.getElementById('ew-cost').value)||r.cost;
-  r.place=document.getElementById('ew-place').value.trim();
-  r.pago=document.getElementById('ep-pago').value;
-  r.notes=document.getElementById('ew-notes').value.trim();
-  persist(); closeModal(); renderWashList(); renderDashboard();
-}
-
-function editTrip(id) {
-  const r=D.trips.find(x=>x.id===id); if(!r) return;
-  openModal('✏️ Editar viaje',`
-    <div class="form-row">
-      <div class="form-group"><label>Fecha</label><input type="date" id="et-date" value="${r.date}"></div>
-      <div class="form-group"><label>Destino</label><input type="text" id="et-label" value="${r.label||''}"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Km inicio</label><input type="number" id="et-kms" value="${r.kmStart}"></div>
-      <div class="form-group"><label>Km llegada</label><input type="number" id="et-kme" value="${r.kmEnd}"></div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Medio de pago</label>${pagoSel(r.pago)}</div>
-      <div class="form-group"><label>Notas</label><input type="text" id="et-notes" value="${r.notes||''}"></div>
-    </div>
-    <button class="btn btn-primary" onclick="saveEditTrip(${id})">💾 Guardar</button>
-  `);
-}
-
-function saveEditTrip(id) {
-  const r=D.trips.find(x=>x.id===id); if(!r) return;
-  r.date=document.getElementById('et-date').value;
-  r.label=document.getElementById('et-label').value.trim();
-  r.kmStart=parseFloat(document.getElementById('et-kms').value)||r.kmStart;
-  r.kmEnd=parseFloat(document.getElementById('et-kme').value)||r.kmEnd;
-  r.dist=r.kmEnd-r.kmStart;
-  r.pago=document.getElementById('ep-pago').value;
-  r.notes=document.getElementById('et-notes').value.trim();
-  persist(); closeModal(); renderTripList(); renderDashboard();
-}
+function saveEditMaint(id){const r=D.maintenance.find(x=>x.id===id);if(!r)return;r.date=document.getElementById('em-date').value;r.cost=parseFloat(document.getElementById('em-cost').value)||r.cost;r.km=parseFloat(document.getElementById('em-km').value)||null;r.nextKm=parseFloat(document.getElementById('em-nextKm').value)||null;r.shop=document.getElementById('em-shop').value.trim();r.pago=document.getElementById('ep-pago').value;r.notes=document.getElementById('em-notes').value.trim();persist();closeModal();renderMaintList();renderDashboard();}
+function editWash(id){const r=D.wash.find(x=>x.id===id);if(!r)return;openModal('✏️ Editar lavado',`<div class="form-row"><div class="form-group"><label>Fecha</label><input type="date" id="ew-date" value="${r.date}"></div><div class="form-group"><label>Costo (S/)</label><input type="number" id="ew-cost" value="${r.cost}" step="0.1"></div></div><div class="form-row"><div class="form-group"><label>Lavadero</label><input type="text" id="ew-place" value="${r.place||''}"></div><div class="form-group"><label>Medio de pago</label>${pagoSel(r.pago)}</div></div><div class="form-group"><label>Notas</label><input type="text" id="ew-notes" value="${r.notes||''}"></div><button class="btn btn-primary" onclick="saveEditWash(${id})">💾 Guardar</button>`);}
+function saveEditWash(id){const r=D.wash.find(x=>x.id===id);if(!r)return;r.date=document.getElementById('ew-date').value;r.cost=parseFloat(document.getElementById('ew-cost').value)||r.cost;r.place=document.getElementById('ew-place').value.trim();r.pago=document.getElementById('ep-pago').value;r.notes=document.getElementById('ew-notes').value.trim();persist();closeModal();renderWashList();renderDashboard();}
+function editTrip(id){const r=D.trips.find(x=>x.id===id);if(!r)return;openModal('✏️ Editar viaje',`<div class="form-row"><div class="form-group"><label>Fecha</label><input type="date" id="et-date" value="${r.date}"></div><div class="form-group"><label>Destino</label><input type="text" id="et-label" value="${r.label||''}"></div></div><div class="form-row"><div class="form-group"><label>Km inicio</label><input type="number" id="et-kms" value="${r.kmStart}"></div><div class="form-group"><label>Km llegada</label><input type="number" id="et-kme" value="${r.kmEnd}"></div></div><div class="form-row"><div class="form-group"><label>Medio de pago</label>${pagoSel(r.pago)}</div><div class="form-group"><label>Notas</label><input type="text" id="et-notes" value="${r.notes||''}"></div></div><button class="btn btn-primary" onclick="saveEditTrip(${id})">💾 Guardar</button>`);}
+function saveEditTrip(id){const r=D.trips.find(x=>x.id===id);if(!r)return;r.date=document.getElementById('et-date').value;r.label=document.getElementById('et-label').value.trim();r.kmStart=parseFloat(document.getElementById('et-kms').value)||r.kmStart;r.kmEnd=parseFloat(document.getElementById('et-kme').value)||r.kmEnd;r.dist=r.kmEnd-r.kmStart;r.pago=document.getElementById('ep-pago').value;r.notes=document.getElementById('et-notes').value.trim();persist();closeModal();renderTripList();renderDashboard();}
 
 // ══════════════════════════════════════════════════════════════
 // DELETE
 // ══════════════════════════════════════════════════════════════
-function delRecord(cat,id) {
-  if(!confirm('¿Eliminar este registro?')) return;
+function delRecord(cat,id){
+  if(!confirm('¿Eliminar este registro?'))return;
   const map={trips:'trips',fuel:'fuel',maintenance:'maintenance',wash:'wash'};
   D[map[cat]]=D[map[cat]].filter(r=>r.id!==id);
-  calcRendimientos(); persist(); renderDashboard();
-  if(cat==='trips') renderTripList();
-  if(cat==='fuel') renderFuelList();
-  if(cat==='maintenance') renderMaintList();
-  if(cat==='wash') renderWashList();
+  calcRendimientos();persist();renderDashboard();
+  if(cat==='trips')renderTripList();if(cat==='fuel')renderFuelList();if(cat==='maintenance')renderMaintList();if(cat==='wash')renderWashList();
 }
 
 // ══════════════════════════════════════════════════════════════
 // NOTIFICACIONES
 // ══════════════════════════════════════════════════════════════
-async function activateNotif() {
+async function activateNotif(){
   if(!('Notification' in window)){alert('Tu navegador no soporta notificaciones');return;}
   const perm=await Notification.requestPermission();
   if(perm!=='granted'){alert('Necesitas permitir notificaciones');return;}
-  const h=parseInt(document.getElementById('cfg-hour').value)||21;
-  const m=parseInt(document.getElementById('cfg-min').value)||0;
-  const now=new Date(),next=new Date();
-  next.setHours(h,m,0,0);
-  if(next<=now) next.setDate(next.getDate()+1);
-  setTimeout(()=>{
-    new Notification('⛽ Tracker Vehículo',{body:'¿Registraste el odómetro hoy?',icon:'/cs15-tracker/icon-192.png'});
-    setInterval(()=>new Notification('⛽ Tracker Vehículo',{body:'¿Registraste el odómetro hoy?',icon:'/cs15-tracker/icon-192.png'}),24*60*60*1000);
-  },next-now);
-  alert(`✅ Recordatorio activado a las ${h}:${String(m).padStart(2,'0')}`);
+  const h=parseInt(document.getElementById('cfg-hour').value)||21,m=parseInt(document.getElementById('cfg-min').value)||0;
+  const now=new Date(),next=new Date();next.setHours(h,m,0,0);if(next<=now)next.setDate(next.getDate()+1);
+  setTimeout(()=>{new Notification('⛽ Tracker Vehículo',{body:'¿Registraste el odómetro hoy?',icon:'/cs15-tracker/icon-192.png'});setInterval(()=>new Notification('⛽ Tracker Vehículo',{body:'¿Registraste el odómetro hoy?',icon:'/cs15-tracker/icon-192.png'}),24*60*60*1000);},next-now);
+  alert(`✅ Recordatorio a las ${h}:${String(m).padStart(2,'0')}`);
 }
 
-function clearAll() {
-  if(!confirm('¿Borrar TODOS los datos? Esta acción no se puede deshacer.')) return;
-  const cfg=D.cfg;
-  D={fuel:[],maintenance:[],wash:[],trips:[],cfg};
-  persist(); renderDashboard(); alert('Datos eliminados');
+function clearAll(){if(!confirm('¿Borrar TODOS los datos?'))return;const cfg=D.cfg;D={fuel:[],maintenance:[],wash:[],trips:[],cfg};persist();renderDashboard();alert('Datos eliminados');}
+
+// ══════════════════════════════════════════════════════════════
+// SERVICE WORKER + AUTO UPDATE
+// ══════════════════════════════════════════════════════════════
+let swWaiting = null;
+function applyUpdate(){if(swWaiting){swWaiting.postMessage({type:'SKIP_WAITING'});window.location.reload();}}
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/cs15-tracker/sw.js').then(reg=>{
+      reg.addEventListener('updatefound',()=>{
+        const newSW=reg.installing;
+        newSW.addEventListener('statechange',()=>{
+          if(newSW.state==='installed'&&navigator.serviceWorker.controller){
+            swWaiting=newSW;
+            document.getElementById('update-banner').style.display='block';
+          }
+        });
+      });
+    }).catch(e=>console.log('SW:',e));
+    navigator.serviceWorker.addEventListener('controllerchange',()=>window.location.reload());
+  });
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1138,15 +900,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   loadData();
   const t=today();
   ['t-date','f-date','m-date','w-date'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=t;});
-  renderSelects();
-  renderDashboard();
+  renderSelects();renderDashboard();
 });
-
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/cs15-tracker/sw.js').catch(e=>console.log('SW:',e));
-  });
-}
 </script>
 </body>
 </html>
